@@ -1,10 +1,25 @@
-# Premium Interactive Wall Calendar
+# Interactive Wall Calendar Component
 
-Designed a physics-inspired motion system simulating real-world paper interactions using spring dynamics, 3D transforms, and sensory feedback.
+## Features
+- Wall calendar UI with hero image
+- Date range selection
+- Notes system (local storage)
+- Holiday indicators + modal
+- Fully responsive design
+- Smooth transitions
 
-## Features:
-- Ultra-Realistic Paper Flip (3D Flip with dynamic skewing)
-- Micro-interactions via Framer Motion
-- Frosty Glassmorphism Layering
-- Dynamic Audio Synthesizer (Pink Noise)
-- React Hooks for local persistence
+## Tech Stack
+- React / Next.js
+- Tailwind CSS
+- Framer Motion
+
+## How to Run
+```bash
+npm install
+npm run dev
+```
+
+## My Approach
+Built step-by-step starting from core functionality, then improved UI, responsiveness, and motion based on iterative refinements.
+
+*I focused more on user experience and clarity rather than adding excessive animations.*
