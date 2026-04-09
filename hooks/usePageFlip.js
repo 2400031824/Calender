@@ -1,23 +1,29 @@
-import { useState } from 'react';
+﻿'use client';
 
-export function usePageFlip() {
-    const [flipState, setFlipState] = useState({ isFlipping: false, direction: null });
+import { useCallback, useState } from 'react';
+import { addMonths, subMonths } from 'date-fns';
+import { playPaperFlipSound } from '../utils/audioSynth';
 
-    const triggerFlip = (direction, callback) => {
-        if (flipState.isFlipping) return;
+export default function usePageFlip(onMonthChange) {
+  const [isFlipping, setIsFlipping] = useState(false);
+  const [direction, setDirection] = useState('next');
 
-        setFlipState({ isFlipping: true, direction });
+  const runFlip = useCallback(
+    (dir) => {
+      if (isFlipping) return;
+      setIsFlipping(true);
+      setDirection(dir);
+      playPaperFlipSound();
+      onMonthChange((current) => (dir === 'next' ? addMonths(current, 1) : subMonths(current, 1)));
+      window.setTimeout(() => {
+        setIsFlipping(false);
+      }, 600);
+    },
+    [isFlipping, onMonthChange]
+  );
 
-        // Switch state precisely at halfway mark when the card is rotated at 90 deg and invisible
-        setTimeout(() => {
-            if (callback) callback();
-        }, 300);
+  const flipNext = useCallback(() => runFlip('next'), [runFlip]);
+  const flipPrev = useCallback(() => runFlip('prev'), [runFlip]);
 
-        // Release animation lock fully afterwards using smooth safe timeout
-        setTimeout(() => {
-            setFlipState({ isFlipping: false, direction: null });
-        }, 650);
-    };
-
-    return { flipState, triggerFlip };
+  return { isFlipping, direction, flipNext, flipPrev };
 }

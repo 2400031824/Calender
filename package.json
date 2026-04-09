@@ -1,9 +1,24 @@
 {
   "name": "wall-calendar-challenge",
   "version": "0.1.0",
+  "description": "Premium interactive wall calendar with notes, date ranges, holidays, and desktop widget mode.",
+  "author": "Adith",
+  "homepage": "https://calender-two-silk.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/2400031824/Calender.git"
+  },
   "private": true,
+  "main": "electron/main.js",
   "scripts": {
     "dev": "next dev",
+    "dev:stable": "powershell -ExecutionPolicy Bypass -File ./scripts/dev-stable.ps1",
+    "dev:stop": "powershell -ExecutionPolicy Bypass -File ./scripts/dev-stop.ps1",
+    "dev:widget": "concurrently -k \"npm run dev\" \"wait-on http://localhost:3000 && powershell -ExecutionPolicy Bypass -File ./scripts/run-widget.ps1\"",
+    "widget:prod": "npm run build && concurrently -k \"npm run start\" \"wait-on http://localhost:3000 && powershell -ExecutionPolicy Bypass -File ./scripts/run-widget.ps1\"",
+    "desktop:pack": "electron-builder --win nsis",
+    "desktop:pack-portable": "electron-builder --win portable",
+    "desktop:pack-dir": "electron-builder --dir",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -23,8 +38,57 @@
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
     "autoprefixer": "^10.4.19",
+    "concurrently": "^9.2.1",
+    "electron": "^41.2.0",
+    "electron-builder": "^26.0.12",
+    "electron-updater": "^6.6.2",
     "postcss": "^8.4.44",
     "tailwindcss": "^3.4.5",
-    "typescript": "5.5.4"
+    "typescript": "5.5.4",
+    "wait-on": "^9.0.4"
+  },
+  "build": {
+    "appId": "com.wallcalendar.widget",
+    "productName": "Wall Calendar Widget",
+    "files": [
+      "electron/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "extraMetadata": {
+      "main": "electron/main.js"
+    },
+    "win": {
+      "icon": "electron/assets/widget-icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "2400031824",
+      "repo": "Calender",
+      "releaseType": "release"
+    }
   }
 }

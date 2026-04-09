@@ -1,14 +1,90 @@
-export const monthData = [
-  { month: 0, name: "JANUARY", image: "https://images.unsplash.com/photo-1445543949571-ffc3e0e2f55e?q=80&w=1600&auto=format&fit=crop", accent: "#2b5876", quote: "New Year, New Beginnings. Make it count." },
-  { month: 1, name: "FEBRUARY", image: "https://images.unsplash.com/photo-1549467610-d8cb845ee6e9?q=80&w=1600&auto=format&fit=crop", accent: "#E91E63", quote: "Push yourself, because no one else is going to do it for you." },
-  { month: 2, name: "MARCH", image: "https://images.unsplash.com/photo-1491904768633-2b7e3e7fede5?q=80&w=1600&auto=format&fit=crop", accent: "#4CAF50", quote: "Small steps every day build big futures." },
-  { month: 3, name: "APRIL", image: "https://images.unsplash.com/photo-1490682143684-14369e18dce8?q=80&w=1600&auto=format&fit=crop", accent: "#FF9800", quote: "Don’t stop when you’re tired. Stop when you’re done." },
-  { month: 4, name: "MAY", image: "https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?q=80&w=1600&auto=format&fit=crop", accent: "#9C27B0", quote: "Wake up with determination. Go to bed with satisfaction." },
-  { month: 5, name: "JUNE", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop", accent: "#00BCD4", quote: "Keep moving forward, the best is yet to come." },
-  { month: 6, name: "JULY", image: "https://images.unsplash.com/photo-1519046904884-53103b34b206?q=80&w=1600&auto=format&fit=crop", accent: "#F44336", quote: "Do something today that your future self will thank you for." },
-  { month: 7, name: "AUGUST", image: "https://images.unsplash.com/photo-1478147424044-8451f28b4c2b?q=80&w=1600&auto=format&fit=crop", accent: "#FFC107", quote: "Freedom is the open window through which pours the sunlight." },
-  { month: 8, name: "SEPTEMBER", image: "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?q=80&w=1600&auto=format&fit=crop", accent: "#795548", quote: "Consistency beats motivation." },
-  { month: 9, name: "OCTOBER", image: "https://images.unsplash.com/photo-1475518112891-b3b0d2b78f49?q=80&w=1600&auto=format&fit=crop", accent: "#FF5722", quote: "Discipline creates freedom." },
-  { month: 10, name: "NOVEMBER", image: "https://images.unsplash.com/photo-1505370213079-bb571bcbc056?q=80&w=1600&auto=format&fit=crop", accent: "#607D8B", quote: "Dreams demand effort." },
-  { month: 11, name: "DECEMBER", image: "https://images.unsplash.com/photo-1512389142860-9c449e58a543?q=80&w=1600&auto=format&fit=crop", accent: "#009688", quote: "It's the most wonderful time of the year. Finish strong." }
+﻿export const MONTH_ACCENTS = [
+  '#1DA9E2',
+  '#E91E8C',
+  '#4CAF50',
+  '#7C3AED',
+  '#FF9800',
+  '#00BCD4',
+  '#FF5722',
+  '#2E7D32',
+  '#BF360C',
+  '#5D4037',
+  '#455A64',
+  '#1A237E'
 ];
+
+export const MONTH_DATA = [
+  {
+    name: 'January',
+    hero: 'https://images.unsplash.com/photo-1483664852095-d6cc6870702d?auto=format&fit=crop&w=1600&q=80',
+    background: 'https://images.unsplash.com/photo-1517299321609-52687d1bc55a?auto=format&fit=crop&w=2000&q=80',
+    accent: MONTH_ACCENTS[0]
+  },
+  {
+    name: 'February',
+    hero: 'https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=1600&q=80',
+    background: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=2000&q=80',
+    accent: MONTH_ACCENTS[1]
+  },
+  {
+    name: 'March',
+    hero: 'https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=1600&q=80',
+    background: 'https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=2000&q=80',
+    accent: MONTH_ACCENTS[2]
+  },
+  {
+    name: 'April',
+    hero: 'https://images.unsplash.com/photo-1526470498-9ae73c665de8?auto=format&fit=crop&w=1600&q=80',
+    background: 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=2000&q=80',
+    accent: MONTH_ACCENTS[3]
+  },
+  {
+    name: 'May',
+    hero: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?auto=format&fit=crop&w=1600&q=80',
+    background: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=2000&q=80',
+    accent: MONTH_ACCENTS[4]
+  },
+  {
+    name: 'June',
+    hero: 'https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=1600&q=80',
+    background: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=80',
+    accent: MONTH_ACCENTS[5]
+  },
+  {
+    name: 'July',
+    hero: 'https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=1600&q=80',
+    background: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=2000&q=80',
+    accent: MONTH_ACCENTS[6]
+  },
+  {
+    name: 'August',
+    hero: 'https://images.unsplash.com/photo-1473773508845-188df298d2d1?auto=format&fit=crop&w=1600&q=80',
+    background: 'https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=2000&q=80',
+    accent: MONTH_ACCENTS[7]
+  },
+  {
+    name: 'September',
+    hero: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80',
+    background: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=2000&q=80',
+    accent: MONTH_ACCENTS[8]
+  },
+  {
+    name: 'October',
+    hero: 'https://images.unsplash.com/photo-1476820865390-c52aeebb9891?auto=format&fit=crop&w=1600&q=80',
+    background: 'https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=2000&q=80',
+    accent: MONTH_ACCENTS[9]
+  },
+  {
+    name: 'November',
+    hero: 'https://images.unsplash.com/photo-1482192505345-5655af888cc4?auto=format&fit=crop&w=1600&q=80',
+    background: 'https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=2000&q=80',
+    accent: MONTH_ACCENTS[10]
+  },
+  {
+    name: 'December',
+    hero: 'https://images.unsplash.com/photo-1457269449834-928af64c684d?auto=format&fit=crop&w=1600&q=80',
+    background: 'https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?auto=format&fit=crop&w=2000&q=80',
+    accent: MONTH_ACCENTS[11]
+  }
+];
+

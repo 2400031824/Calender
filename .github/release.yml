@@ -1,0 +1,28 @@
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+    authors:
+      - github-actions[bot]
+  categories:
+    - title: "Calendar Features"
+      labels:
+        - feature
+        - calendar
+        - notes
+    - title: "Desktop Widget"
+      labels:
+        - desktop
+        - electron
+        - widget
+    - title: "Fixes"
+      labels:
+        - bug
+        - fix
+    - title: "Performance and Stability"
+      labels:
+        - performance
+        - stability
+    - title: "Other Changes"
+      labels:
+        - "*"

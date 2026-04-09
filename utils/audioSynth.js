@@ -1,45 +1,48 @@
-export function playPageTurnSound() {
-    try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const duration = 0.45;
-        const buffer = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
-        const data = buffer.getChannelData(0);
+﻿'use client';
 
-        // Pink noise is softer than white noise for swishing sounds
-        let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+export function playPaperFlipSound() {
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  if (!AudioCtx) return;
 
-        for (let i = 0; i < data.length; i++) {
-            const white = Math.random() * 2 - 1;
-            // Paul Kellet's pink noise approximation
-            b0 = 0.99886 * b0 + white * 0.0555179;
-            b1 = 0.99332 * b1 + white * 0.0750759;
-            b2 = 0.96900 * b2 + white * 0.1538520;
-            b3 = 0.86650 * b3 + white * 0.3104856;
-            b4 = 0.55000 * b4 + white * 0.5329522;
-            b5 = -0.7616 * b5 - white * 0.0168980;
-            let pink = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
-            b6 = white * 0.115926;
+  const ctx = new AudioCtx();
 
-            const t = i / data.length;
-            // Super smooth bell curve envelope
-            const envelope = Math.sin(Math.pow(t, 0.7) * Math.PI);
-            data[i] = pink * envelope * 0.08;
-        }
+  const duration = 0.38;
+  const sampleRate = ctx.sampleRate;
+  const bufferSize = Math.floor(sampleRate * duration);
+  const buffer = ctx.createBuffer(2, bufferSize, sampleRate);
 
-        const source = ctx.createBufferSource();
-        source.buffer = buffer;
-
-        // Lowpass filter to sweep down frequencies over the duration
-        const filter = ctx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.Q.value = 1.0;
-        filter.frequency.setValueAtTime(3000, ctx.currentTime);
-        filter.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + duration);
-
-        source.connect(filter);
-        filter.connect(ctx.destination);
-        source.start();
-    } catch (e) {
-        console.error("Audio synth failed", e);
+  for (let channel = 0; channel < 2; channel += 1) {
+    const data = buffer.getChannelData(channel);
+    for (let i = 0; i < bufferSize; i += 1) {
+      const progress = i / bufferSize;
+      const envelope = Math.pow(Math.sin(progress * Math.PI), 0.6) * 0.35;
+      const noise = Math.random() * 2 - 1;
+      const tone = Math.sin(progress * 180) * 0.08;
+      data[i] = (noise * 0.92 + tone) * envelope;
     }
+  }
+
+  const source = ctx.createBufferSource();
+  source.buffer = buffer;
+
+  const highShelf = ctx.createBiquadFilter();
+  highShelf.type = 'highshelf';
+  highShelf.frequency.value = 3500;
+  highShelf.gain.value = 6;
+
+  const lowCut = ctx.createBiquadFilter();
+  lowCut.type = 'highpass';
+  lowCut.frequency.value = 800;
+
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.28, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+
+  source.connect(lowCut);
+  lowCut.connect(highShelf);
+  highShelf.connect(gain);
+  gain.connect(ctx.destination);
+
+  source.start();
+  source.stop(ctx.currentTime + duration);
 }

@@ -1,60 +1,49 @@
-"use client";
-import React from 'react';
-import { motion } from 'framer-motion';
+﻿'use client';
 
-export default function HeroImage({ data, year, isFlipping }) {
-    if (!data) return null;
-    const { name, accent, quote, image } = data;
+import { AnimatePresence, motion } from 'framer-motion';
 
-    return (
-        <div className="relative w-full h-[35%] overflow-hidden shrink-0">
-            {/* Cinematic Slow Zoom Background Image Layer */}
-            {!isFlipping && (
-                <motion.img
-                    src={image}
-                    className="absolute inset-0 w-full h-full object-cover transform-gpu"
-                    animate={{ scale: [1, 1.05] }}
-                    transition={{ duration: 30, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
-                />
-            )}
-            {isFlipping && (
-                <img
-                    src={image}
-                    className="absolute inset-0 w-full h-full object-cover transform-gpu"
-                />
-            )}
+export default function HeroImage({ src, monthLabel, year, accent, paused, quote, monthIndex }) {
+  return (
+    <div className="hero-section">
+      <AnimatePresence mode="wait">
+        <motion.img
+          key={src}
+          src={src}
+          alt={monthLabel}
+          className="h-full w-full object-cover"
+          initial={{ opacity: 0 }}
+          animate={paused ? { opacity: 1, scale: 1.02 } : { opacity: 1, scale: [1, 1.06, 1] }}
+          exit={{ opacity: 0 }}
+          transition={
+            paused
+              ? { opacity: { duration: 0.4 }, scale: { duration: 0.4 } }
+              : {
+                  opacity: { duration: 0.4 },
+                  scale: { duration: 20, repeat: Number.POSITIVE_INFINITY, repeatType: 'reverse', ease: 'easeInOut' }
+                }
+          }
+          loading="eager"
+        />
+      </AnimatePresence>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/5 to-transparent" />
 
-            {/* Overlay Gradient for Quote Legibility */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/30 pointer-events-none" />
+      <motion.p
+        key={`${monthLabel}-quote`}
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.7 }}
+        className={`month-quote quote-style-${monthIndex} absolute left-5 top-4 max-w-[82%] text-[22px] font-semibold leading-[1.18] text-white md:text-[30px]`}
+      >
+        {quote}
+      </motion.p>
 
-            {/* AI Generated Quote Layout controlled strictly */}
-            {quote && !isFlipping && (
-                <motion.div
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1.5, ease: "easeOut", delay: 0.3 }}
-                    className="absolute top-[25%] left-6 right-20 text-white text-lg font-serif italic drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] z-20"
-                >
-                    "{quote}"
-                </motion.div>
-            )}
-            {quote && isFlipping && (
-                <div className="absolute top-[25%] left-6 right-20 text-white text-lg font-serif italic drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] z-20">
-                    "{quote}"
-                </div>
-            )}
-
-            {/* Chevron Banner */}
-            <div
-                className="absolute bottom-0 right-0 px-6 py-2 text-white flex flex-col items-end z-10 drop-shadow-md"
-                style={{
-                    backgroundColor: accent || '#1DA9E2',
-                    clipPath: 'polygon(15px 0, 100% 0, 100% 100%, 0 100%)'
-                }}
-            >
-                <span className="text-sm font-light leading-tight tracking-[0.2em] opacity-90">{year}</span>
-                <span className="text-2xl font-black tracking-widest">{name}</span>
-            </div>
-        </div>
-    );
+      <div
+        className="absolute bottom-0 right-0 min-w-[170px] px-4 py-3 text-right text-white"
+        style={{ clipPath: 'polygon(0 40%, 100% 0%, 100% 100%, 0 100%)', backgroundColor: accent }}
+      >
+        <p className="text-xs font-light tracking-[0.08em]">{year}</p>
+        <p className="text-2xl font-extrabold uppercase tracking-[0.05em]">{monthLabel}</p>
+      </div>
+    </div>
+  );
 }
