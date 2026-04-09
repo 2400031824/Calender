@@ -1,19 +1,23 @@
-import { useState, useCallback } from 'react';
-import { playPageTurnSound } from '../utils/audioSynth';
+import { useState } from 'react';
 
-export function usePageFlip(onFlipComplete) {
-    const [isFlipping, setIsFlipping] = useState(false);
+export function usePageFlip() {
+    const [flipState, setFlipState] = useState({ isFlipping: false, direction: null });
 
-    const triggerFlip = useCallback(() => {
-        if (isFlipping) return;
-        setIsFlipping(true);
-        playPageTurnSound();
+    const triggerFlip = (direction, callback) => {
+        if (flipState.isFlipping) return;
 
+        setFlipState({ isFlipping: true, direction });
+
+        // Switch state precisely at halfway mark when the card is rotated at 90 deg and invisible
         setTimeout(() => {
-            setIsFlipping(false);
-            if (onFlipComplete) onFlipComplete();
-        }, 520); // 520ms animation duration
-    }, [isFlipping, onFlipComplete]);
+            if (callback) callback();
+        }, 300);
 
-    return { isFlipping, triggerFlip };
+        // Release animation lock fully afterwards using smooth safe timeout
+        setTimeout(() => {
+            setFlipState({ isFlipping: false, direction: null });
+        }, 650);
+    };
+
+    return { flipState, triggerFlip };
 }

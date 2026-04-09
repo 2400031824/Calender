@@ -2,51 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
-@keyframes flipPage {
+@keyframes flipPageForward {
   0% {
-    transform: perspective(1200px) rotateX(0deg) skewX(0deg);
-    box-shadow: inset 0 0 0 rgba(0, 0, 0, 0);
+    transform: perspective(1500px) rotateY(0deg) scale(1);
   }
 
-  25% {
-    box-shadow: inset 0 -20px 40px rgba(0, 0, 0, 0.05);
+  40% {
+    transform: perspective(1500px) rotateY(-90deg) scale(0.95);
   }
 
   50% {
-    transform: perspective(1200px) rotateX(90deg) skewX(-1.5deg);
-    box-shadow: inset 0 -40px 80px rgba(0, 0, 0, 0.1);
+    transform: perspective(1500px) rotateY(-90deg) scale(0.95);
   }
 
-  75% {
-    box-shadow: inset 0 -20px 40px rgba(0, 0, 0, 0.05);
+  50.01% {
+    transform: perspective(1500px) rotateY(90deg) scale(0.95);
+  }
+
+  60% {
+    transform: perspective(1500px) rotateY(90deg) scale(0.95);
   }
 
   100% {
-    transform: perspective(1200px) rotateX(180deg) skewX(0deg);
-    box-shadow: inset 0 0 0 rgba(0, 0, 0, 0);
+    transform: perspective(1500px) rotateY(0deg) scale(1);
+  }
+}
+
+@keyframes flipPageBackward {
+  0% {
+    transform: perspective(1500px) rotateY(0deg) scale(1);
+  }
+
+  40% {
+    transform: perspective(1500px) rotateY(90deg) scale(0.95);
+  }
+
+  50% {
+    transform: perspective(1500px) rotateY(90deg) scale(0.95);
+  }
+
+  50.01% {
+    transform: perspective(1500px) rotateY(-90deg) scale(0.95);
+  }
+
+  60% {
+    transform: perspective(1500px) rotateY(-90deg) scale(0.95);
+  }
+
+  100% {
+    transform: perspective(1500px) rotateY(0deg) scale(1);
   }
 }
 
 @keyframes dropIn {
   from {
     opacity: 0;
-    transform: translateY(-40px);
+    transform: translateY(-20px) scale(0.98);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
 .calendar-enter {
-  animation: dropIn 400ms ease-out forwards;
+  animation: dropIn 700ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 body {
-  /* Give the body a subtle premium vibrant gradient so glassmorphism pop! */
-  background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
-  background-attachment: fixed;
+  /* Calm premium modern backdrop */
+  background: #E8ECEF;
   margin: 0;
   min-height: 100vh;
 }

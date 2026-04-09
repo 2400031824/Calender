@@ -1,7 +1,6 @@
 ﻿"use client";
 import React, { useState } from 'react';
 import { format } from 'date-fns';
-import { motion, AnimatePresence } from 'framer-motion';
 
 import SpiralBinding from './SpiralBinding';
 import HeroImage from './HeroImage';
@@ -13,58 +12,52 @@ import DailyNotesDrawer from './DailyNotesDrawer';
 import { useCalendarState } from '../hooks/useCalendarState';
 import { usePageFlip } from '../hooks/usePageFlip';
 import { monthData } from '../data/monthImages';
+import { playPageTurnSound } from '../utils/audioSynth';
 
 export default function WallCalendar() {
-  const { currDate, nextMonth, prevMonth } = useCalendarState();
-  const { isFlipping, triggerFlip } = usePageFlip();
-  const [selection, setSelection] = useState({ start: null, end: null });
+  const { currDate, nextMonth, prevMonth, selection, setSelection, handleDateInteraction } = useCalendarState();
+  const { flipState, triggerFlip } = usePageFlip();
 
   const mIndex = currDate.getMonth();
   const data = monthData[mIndex] || monthData[0];
   const monthKey = format(currDate, 'yyyy_MM');
 
-  // Bottom Right -> Next Month
   const handleNextClick = () => {
-    if (isFlipping) return;
+    if (flipState.isFlipping) return;
     setSelection({ start: null, end: null });
-    triggerFlip(() => nextMonth());
+    playPageTurnSound();
+    triggerFlip('forward', () => nextMonth());
   };
 
-  // Top Right -> Prev Month
   const handlePrevClick = () => {
-    if (isFlipping) return;
+    if (flipState.isFlipping) return;
     setSelection({ start: null, end: null });
-    triggerFlip(() => prevMonth());
+    playPageTurnSound();
+    triggerFlip('backward', () => prevMonth());
   };
 
   const clearSelection = () => setSelection({ start: null, end: null });
 
+  let animationClass = 'none';
+  if (flipState.isFlipping) {
+    animationClass = flipState.direction === 'forward'
+      ? 'flipPageForward 650ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards'
+      : 'flipPageBackward 650ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
+  }
+
   return (
     <div className="relative w-full max-w-[900px] h-full md:h-[650px] calendar-enter" style={{ perspective: '2000px' }}>
 
-      {/* The Master Glassmorphism & Framer Motion Wrap */}
-      <motion.div
-        animate={{
-          y: [0, -8, 0],
-          boxShadow: [
-            "0px 15px 30px rgba(0,0,0,0.1)",
-            "0px 25px 50px rgba(0,0,0,0.15)",
-            "0px 15px 30px rgba(0,0,0,0.1)"
-          ]
-        }}
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-        className="w-full h-full relative"
-      >
+      {/* Container Frame stripped of float animations for strict controlled motion */}
+      <div className="w-full h-full relative rounded-lg drop-shadow-[0_20px_40px_rgba(0,0,0,0.15)]">
+
         {/* Visual rendering of the Page */}
         <div
-          className="absolute inset-0 bg-white/20 backdrop-blur-2xl rounded-lg border border-white/50 flex flex-col md:flex-row overflow-hidden shadow-2xl"
+          className="absolute inset-0 bg-white/50 backdrop-blur-3xl rounded-lg border border-white/50 flex flex-col md:flex-row overflow-hidden"
           style={{
-            transformOrigin: 'top center',
-            animation: isFlipping ? 'flipPage 550ms ease-in-out forwards' : 'none'
+            transformOrigin: 'center center',
+            animation: animationClass,
+            backfaceVisibility: 'hidden'
           }}
         >
           {/* Left Notes Section */}
@@ -73,12 +66,12 @@ export default function WallCalendar() {
           </div>
 
           {/* Right Calendar Container */}
-          <div className="flex-1 flex flex-col relative z-0">
+          <div className="flex-1 flex flex-col relative z-0 bg-white/10">
             <HeroImage data={data} year={currDate.getFullYear()} />
             <CalendarGrid
-              currDate={currDate}
+              currentMonth={currDate}
               selection={selection}
-              setSelection={setSelection}
+              onDateInteraction={handleDateInteraction}
               accentColor={data.accent}
             />
             <DailyNotesDrawer
@@ -89,12 +82,17 @@ export default function WallCalendar() {
           </div>
         </div>
 
-        {/* Physical Decor */}
+        {/* Physical Decor remains steady overlay */}
         <SpiralBinding />
-        <PageCurlCorner position="top" onCurlClick={handlePrevClick} />
-        <PageCurlCorner position="bottom" onCurlClick={handleNextClick} />
 
-      </motion.div>
+        {/* Interaction zones */}
+        {!flipState.isFlipping && (
+          <>
+            <PageCurlCorner position="top" onCurlClick={handlePrevClick} />
+            <PageCurlCorner position="bottom" onCurlClick={handleNextClick} />
+          </>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,12 +1,16 @@
 import { useState } from 'react';
-import { addMonths } from 'date-fns';
+import { addMonths, subMonths } from 'date-fns';
 
 export function useCalendarState() {
-    const [currentMonth, setCurrentMonth] = useState(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
+    const [currDate, setCurrDate] = useState(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
     const [selection, setSelection] = useState({ start: null, end: null });
 
     const nextMonth = () => {
-        setCurrentMonth(prev => addMonths(prev, 1));
+        setCurrDate(prev => addMonths(prev, 1));
+    };
+
+    const prevMonth = () => {
+        setCurrDate(prev => subMonths(prev, 1));
     };
 
     const handleDateInteraction = (dateObj) => {
@@ -39,9 +43,11 @@ export function useCalendarState() {
     };
 
     return {
-        currentMonth,
+        currDate,
         nextMonth,
+        prevMonth,
         selection,
+        setSelection,
         handleDateInteraction,
         clearSelection
     };
