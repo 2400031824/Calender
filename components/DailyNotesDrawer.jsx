@@ -33,6 +33,7 @@ export default function DailyNotesDrawer({ selection, accentColor }) {
                 borderColor: accentColor,
                 borderTopWidth: isOpen ? '4px' : '0'
             }}
+            onClick={(e) => e.stopPropagation()}
         >
             <div className="flex-1 flex flex-col p-4 md:p-6 pb-6">
                 <div className="text-sm font-bold text-gray-800 tracking-wide mb-3 flex items-center gap-2">
