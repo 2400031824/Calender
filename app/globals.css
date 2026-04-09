@@ -2,79 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
-@keyframes flipPageForward {
+@keyframes flipPageUp {
   0% {
-    transform: perspective(1500px) rotateY(0deg) scale(1);
+    transform: perspective(1500px) rotateX(0deg) skewX(0deg);
   }
 
-  40% {
-    transform: perspective(1500px) rotateY(-90deg) scale(0.95);
+  49.9% {
+    transform: perspective(1500px) rotateX(90deg) skewX(1deg);
   }
 
   50% {
-    transform: perspective(1500px) rotateY(-90deg) scale(0.95);
-  }
-
-  50.01% {
-    transform: perspective(1500px) rotateY(90deg) scale(0.95);
-  }
-
-  60% {
-    transform: perspective(1500px) rotateY(90deg) scale(0.95);
+    transform: perspective(1500px) rotateX(-90deg) skewX(-1deg);
   }
 
   100% {
-    transform: perspective(1500px) rotateY(0deg) scale(1);
+    transform: perspective(1500px) rotateX(0deg) skewX(0deg);
   }
 }
 
-@keyframes flipPageBackward {
+@keyframes flipPageDown {
   0% {
-    transform: perspective(1500px) rotateY(0deg) scale(1);
+    transform: perspective(1500px) rotateX(0deg) skewX(0deg);
   }
 
-  40% {
-    transform: perspective(1500px) rotateY(90deg) scale(0.95);
+  49.9% {
+    transform: perspective(1500px) rotateX(-90deg) skewX(-1deg);
   }
 
   50% {
-    transform: perspective(1500px) rotateY(90deg) scale(0.95);
-  }
-
-  50.01% {
-    transform: perspective(1500px) rotateY(-90deg) scale(0.95);
-  }
-
-  60% {
-    transform: perspective(1500px) rotateY(-90deg) scale(0.95);
+    transform: perspective(1500px) rotateX(90deg) skewX(1deg);
   }
 
   100% {
-    transform: perspective(1500px) rotateY(0deg) scale(1);
+    transform: perspective(1500px) rotateX(0deg) skewX(0deg);
   }
 }
 
 @keyframes dropIn {
   from {
     opacity: 0;
-    transform: translateY(-20px) scale(0.98);
+    transform: translateY(-30px);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
 .calendar-enter {
-  animation: dropIn 700ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation: dropIn 800ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 body {
-  /* Calm premium modern backdrop */
   background: #E8ECEF;
   margin: 0;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 textarea::placeholder {

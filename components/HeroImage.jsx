@@ -2,25 +2,33 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-export default function HeroImage({ data, year }) {
+export default function HeroImage({ data, year, isFlipping }) {
     if (!data) return null;
     const { name, accent, quote, image } = data;
 
     return (
         <div className="relative w-full h-[35%] overflow-hidden shrink-0">
             {/* Cinematic Slow Zoom Background Image Layer */}
-            <motion.img
-                src={image}
-                className="absolute inset-0 w-full h-full object-cover transform-gpu"
-                animate={{ scale: [1, 1.05] }}
-                transition={{ duration: 25, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
-            />
+            {!isFlipping && (
+                <motion.img
+                    src={image}
+                    className="absolute inset-0 w-full h-full object-cover transform-gpu"
+                    animate={{ scale: [1, 1.05] }}
+                    transition={{ duration: 30, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
+                />
+            )}
+            {isFlipping && (
+                <img
+                    src={image}
+                    className="absolute inset-0 w-full h-full object-cover transform-gpu"
+                />
+            )}
 
             {/* Overlay Gradient for Quote Legibility */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/30 pointer-events-none" />
 
             {/* AI Generated Quote Layout controlled strictly */}
-            {quote && (
+            {quote && !isFlipping && (
                 <motion.div
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -29,6 +37,11 @@ export default function HeroImage({ data, year }) {
                 >
                     "{quote}"
                 </motion.div>
+            )}
+            {quote && isFlipping && (
+                <div className="absolute top-[25%] left-6 right-20 text-white text-lg font-serif italic drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] z-20">
+                    "{quote}"
+                </div>
             )}
 
             {/* Chevron Banner */}

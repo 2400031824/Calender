@@ -41,51 +41,45 @@ export default function WallCalendar() {
   let animationClass = 'none';
   if (flipState.isFlipping) {
     animationClass = flipState.direction === 'forward'
-      ? 'flipPageForward 650ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards'
-      : 'flipPageBackward 650ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
+      ? 'flipPageUp 700ms cubic-bezier(0.3, 0.8, 0.4, 1) forwards'
+      : 'flipPageDown 700ms cubic-bezier(0.3, 0.8, 0.4, 1) forwards';
   }
 
   return (
-    <div className="relative w-full max-w-[900px] h-full md:h-[650px] calendar-enter" style={{ perspective: '2000px' }}>
+    <div className="flex flex-col lg:flex-row w-full min-h-screen items-center justify-center p-4 md:p-8 lg:p-12 xl:p-16 gap-6 lg:gap-10 calendar-enter">
 
-      {/* Container Frame stripped of float animations for strict controlled motion */}
-      <div className="w-full h-full relative rounded-lg drop-shadow-[0_20px_40px_rgba(0,0,0,0.15)]">
+      {/* LEFT COMPONENT (25%): Notes + Holidays Block */}
+      <div className="w-full lg:w-[25%] max-w-[450px] lg:max-w-none h-auto min-h-[400px] lg:h-[700px] flex shrink-0 drop-shadow-[0_15px_30px_rgba(0,0,0,0.08)]">
+        <MonthlyNotes monthKey={monthKey} isFlipping={flipState.isFlipping} />
+      </div>
 
-        {/* Visual rendering of the Page */}
+      {/* RIGHT COMPONENT (75%): Master Calendar Area */}
+      <div className="w-full lg:w-[75%] max-w-[1000px] h-[600px] lg:h-[700px] flex justify-center relative perspective-[2500px]">
+        {/* Flipping Calendar Page Container */}
         <div
-          className="absolute inset-0 bg-white/50 backdrop-blur-3xl rounded-lg border border-white/50 flex flex-col md:flex-row overflow-hidden"
+          className="w-full h-full relative bg-white/95 backdrop-blur-2xl rounded-xl border border-white/60 flex flex-col overflow-hidden shadow-[0_25px_50px_rgba(0,0,0,0.1)]"
           style={{
-            transformOrigin: 'center center',
-            animation: animationClass,
-            backfaceVisibility: 'hidden'
+            transformOrigin: 'top center',
+            animation: animationClass
           }}
         >
-          {/* Left Notes Section */}
-          <div className="hidden md:block w-[30%] shrink-0 z-10">
-            <MonthlyNotes monthKey={monthKey} />
-          </div>
-
-          {/* Right Calendar Container */}
-          <div className="flex-1 flex flex-col relative z-0 bg-white/10">
-            <HeroImage data={data} year={currDate.getFullYear()} />
-            <CalendarGrid
-              currentMonth={currDate}
-              selection={selection}
-              onDateInteraction={handleDateInteraction}
-              accentColor={data.accent}
-            />
-            <DailyNotesDrawer
-              selection={selection}
-              accentColor={data.accent}
-              onClose={clearSelection}
-            />
-          </div>
+          <HeroImage data={data} year={currDate.getFullYear()} isFlipping={flipState.isFlipping} />
+          <CalendarGrid
+            currentMonth={currDate}
+            selection={selection}
+            onDateInteraction={handleDateInteraction}
+            accentColor={data.accent}
+          />
+          <DailyNotesDrawer
+            selection={selection}
+            accentColor={data.accent}
+            onClose={clearSelection}
+          />
+          {/* The physical spirals lock onto the top of the calendar board permanently */}
+          <SpiralBinding />
         </div>
 
-        {/* Physical Decor remains steady overlay */}
-        <SpiralBinding />
-
-        {/* Interaction zones */}
+        {/* Paper Click Target Corners (Rendered outside the flip animation to avoid disappearing bounds) */}
         {!flipState.isFlipping && (
           <>
             <PageCurlCorner position="top" onCurlClick={handlePrevClick} />
