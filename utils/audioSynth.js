@@ -1,17 +1,21 @@
 export function playPageTurnSound() {
     try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const buffer = ctx.createBuffer(1, ctx.sampleRate * 0.4, ctx.sampleRate);
+        const duration = 0.25;
+        const buffer = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
         const data = buffer.getChannelData(0);
         for (let i = 0; i < data.length; i++) {
-            data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / data.length, 2);
+            const t = i / data.length;
+            // Soft swish envelope
+            const envelope = Math.pow(t, 0.2) * Math.pow(1 - t, 3);
+            data[i] = (Math.random() * 2 - 1) * envelope * 0.5;
         }
         const source = ctx.createBufferSource();
         source.buffer = buffer;
         const filter = ctx.createBiquadFilter();
-        filter.type = 'bandpass';
-        filter.frequency.value = 2000;
-        filter.Q.value = 0.8;
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(6000, ctx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + duration);
         source.connect(filter);
         filter.connect(ctx.destination);
         source.start();

@@ -43,10 +43,7 @@ export default function MonthlyNotes({ monthKey }) {
                 placeholder="Write here..."
             />
             {dailyNotes.length > 0 && (
-                <div className="mt-4 pt-4 border-t border-gray-200">
-                    <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">
-                        Daily Highlights
-                    </div>
+                <div className="mt-2 pt-2">
                     <ul className="list-disc pl-4 text-xs text-gray-600 space-y-1 max-h-[100px] overflow-y-auto">
                         {dailyNotes.map((dn, idx) => (
                             <li key={idx} className="truncate" title={dn}>{dn}</li>
