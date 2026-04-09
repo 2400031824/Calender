@@ -2,22 +2,28 @@
 import React from 'react';
 import { format } from 'date-fns';
 import { useNotes } from '../hooks/useNotes';
+import { getHolidayForDate } from '../data/indianHolidays';
 
 export default function DailyNotesDrawer({ selection, accentColor, onClose }) {
     const { start, end } = selection;
 
     let noteKey = null;
     let title = "";
+    let holidayName = "";
 
     if (start && end) {
-        // order the dates correctly just in case
         const s = start < end ? start : end;
         const e = start < end ? end : start;
         noteKey = `note_range_${format(s, 'yyyy_MM_dd')}_to_${format(e, 'yyyy_MM_dd')}`;
         title = `${format(s, 'MMMM d')} — ${format(e, 'MMMM d')} Notes`;
     } else if (start && !end) {
         noteKey = `note_day_${format(start, 'yyyy_MM_dd')}`;
-        title = `${format(start, 'MMMM d')} — Notes`;
+        const holiday = getHolidayForDate(start);
+        if (holiday) {
+            title = `${format(start, 'MMMM d')} — ${holiday.name}`;
+        } else {
+            title = `${format(start, 'MMMM d')} — Notes`;
+        }
     }
 
     const [note, updateNote] = useNotes(noteKey);
@@ -28,8 +34,8 @@ export default function DailyNotesDrawer({ selection, accentColor, onClose }) {
             className={`absolute bottom-0 left-0 w-full bg-white transition-transform duration-300 ease-in-out border-t shadow-[0_-4px_16px_rgba(0,0,0,0.06)] rounded-b-lg flex flex-col z-30
                   md:rounded-tr-lg sm:rounded-tl-none rounded-t-2xl`}
             style={{
-                height: '40%', // approx proper size
-                transform: isOpen ? 'translateY(0)' : 'translateY(110%)', // move down a bit extra to hide fully
+                height: '40%',
+                transform: isOpen ? 'translateY(0)' : 'translateY(110%)',
                 borderColor: accentColor,
                 borderTopWidth: isOpen ? '4px' : '0'
             }}
@@ -37,7 +43,7 @@ export default function DailyNotesDrawer({ selection, accentColor, onClose }) {
         >
             <div className="flex-1 flex flex-col p-4 md:p-6 pb-6">
                 <div className="flex flex-row justify-between items-center mb-3">
-                    <div className="text-sm font-bold text-gray-800 tracking-wide flex items-center gap-2">
+                    <div className="text-sm font-bold tracking-wide flex items-center gap-2" style={{ color: accentColor }}>
                         <div className="w-2 h-2 rounded-full" style={{ backgroundColor: accentColor }}></div>
                         {title}
                     </div>
