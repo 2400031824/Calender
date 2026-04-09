@@ -1,0 +1,26 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes flipPage {
+  0% { transform: rotateX(0deg); }
+  50% { transform: rotateX(-90deg); }
+  100% { transform: rotateX(-180deg); }
+}
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.calendar-enter {
+  animation: dropIn 400ms ease-out forwards;
+}
+
+body {
+  background-color: #EFEFEF;
+}
+
+textarea::placeholder {
+  color: #a1a1aa;
+}
