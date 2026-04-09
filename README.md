@@ -1,37 +1,10 @@
-# Wall Calendar Challenge
+# Premium Interactive Wall Calendar
 
-Interactive React/Next.js rectangular wall calendar component with integrated notes.
+Designed a physics-inspired motion system simulating real-world paper interactions using spring dynamics, 3D transforms, and sensory feedback.
 
-## Features
-
-- Rectangular wall calendar layout (4:3 ratio)
-- Large hero image at the top (spring-themed for April)
-- Calendar grid with faded adjacent month dates
-- Drag-to-select date ranges
-- Integrated notes section (month notes + selection notes)
-- Bottom-to-top page flip animation with sound
-- LocalStorage persistence for notes
-- No separate panels - everything in one cohesive calendar
-
-## Run locally
-
-1. Install dependencies
-
-```bash
-npm install
-```
-
-2. Start the development server
-
-```bash
-npm run dev
-```
-
-3. Open the browser at `http://localhost:3000`
-
-## Notes
-
-- The calendar is implemented in `components/WallCalendar.tsx`
-- Styles are in `app/globals.css`
-- Notes persist client-side using `localStorage`
-- Click the top/bottom edges to flip between months
+## Features:
+- Ultra-Realistic Paper Flip (3D Flip with dynamic skewing)
+- Micro-interactions via Framer Motion
+- Frosty Glassmorphism Layering
+- Dynamic Audio Synthesizer (Pink Noise)
+- React Hooks for local persistence
