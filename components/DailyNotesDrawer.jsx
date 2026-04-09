@@ -31,33 +31,35 @@ export default function DailyNotesDrawer({ selection, accentColor, onClose }) {
 
     return (
         <div
-            className={`absolute bottom-0 left-0 w-full bg-white transition-transform duration-300 ease-in-out border-t shadow-[0_-4px_16px_rgba(0,0,0,0.06)] rounded-b-lg flex flex-col z-30
-                  md:rounded-tr-lg sm:rounded-tl-none rounded-t-2xl`}
+            className={`absolute bottom-0 left-0 w-full bg-white/40 transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] border-t border-white/50 shadow-[0_-10px_30px_rgba(0,0,0,0.1)] rounded-b-lg flex flex-col z-30
+                  md:rounded-tr-[2rem] sm:rounded-tl-none rounded-t-3xl backdrop-blur-2xl`}
             style={{
                 height: '40%',
                 transform: isOpen ? 'translateY(0)' : 'translateY(110%)',
-                borderColor: accentColor,
-                borderTopWidth: isOpen ? '4px' : '0'
+                borderTopColor: accentColor,
             }}
             onClick={(e) => e.stopPropagation()}
         >
+            {/* Color Accent Indicator Strip */}
+            {isOpen && <div className="absolute top-0 left-0 w-full h-1.5 opacity-80 rounded-t-full" style={{ backgroundColor: accentColor }} />}
+
             <div className="flex-1 flex flex-col p-4 md:p-6 pb-6">
                 <div className="flex flex-row justify-between items-center mb-3">
-                    <div className="text-sm font-bold tracking-wide flex items-center gap-2" style={{ color: accentColor }}>
-                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: accentColor }}></div>
+                    <div className="text-sm font-extrabold tracking-wide flex items-center gap-2 drop-shadow-sm" style={{ color: accentColor }}>
+                        <div className="w-2.5 h-2.5 rounded-full shadow-sm" style={{ backgroundColor: accentColor }}></div>
                         {title}
                     </div>
                     <button
                         onClick={(e) => { e.stopPropagation(); if (onClose) onClose(); }}
-                        className="text-gray-400 hover:text-gray-700 transition"
+                        className="text-gray-600 hover:text-black transition transform hover:rotate-90 hover:scale-110 active:scale-95 bg-white/30 rounded-full p-1"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                     </button>
                 </div>
                 <textarea
-                    className="flex-1 w-full bg-transparent resize-none outline-none text-sm text-gray-700 leading-7 font-sans"
+                    className="flex-1 w-full bg-transparent resize-none outline-none text-sm text-gray-900 leading-7 font-sans font-medium mix-blend-color-burn"
                     style={{
-                        backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, #f3f4f6 27px, #f3f4f6 28px)',
+                        backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(0,0,0,0.1) 27px, rgba(0,0,0,0.1) 28px)',
                         lineHeight: '28px',
                         backgroundAttachment: 'local'
                     }}

@@ -1,101 +1,100 @@
 ﻿"use client";
-import React from 'react';
-import { format, addMonths } from 'date-fns';
-import { useCalendarState } from '../hooks/useCalendarState';
-import { usePageFlip } from '../hooks/usePageFlip';
-import { monthData } from '../data/monthImages';
+import React, { useState } from 'react';
+import { format } from 'date-fns';
+import { motion, AnimatePresence } from 'framer-motion';
+
 import SpiralBinding from './SpiralBinding';
 import HeroImage from './HeroImage';
 import CalendarGrid from './CalendarGrid';
 import MonthlyNotes from './MonthlyNotes';
-import DailyNotesDrawer from './DailyNotesDrawer';
 import PageCurlCorner from './PageCurlCorner';
+import DailyNotesDrawer from './DailyNotesDrawer';
+
+import { useCalendarState } from '../hooks/useCalendarState';
+import { usePageFlip } from '../hooks/usePageFlip';
+import { monthData } from '../data/monthImages';
 
 export default function WallCalendar() {
-  const { currentMonth, nextMonth, selection, handleDateInteraction, clearSelection } = useCalendarState();
-  const { isFlipping, triggerFlip } = usePageFlip(nextMonth);
+  const { currDate, nextMonth, prevMonth } = useCalendarState();
+  const { isFlipping, triggerFlip } = usePageFlip();
+  const [selection, setSelection] = useState({ start: null, end: null });
 
-  const mIndex = currentMonth.getMonth();
-  const year = currentMonth.getFullYear();
-  const nextMonthDate = addMonths(currentMonth, 1);
-  const nextMIndex = nextMonthDate.getMonth();
-  const nextYear = nextMonthDate.getFullYear();
+  const mIndex = currDate.getMonth();
+  const data = monthData[mIndex] || monthData[0];
+  const monthKey = format(currDate, 'yyyy_MM');
 
-  const currentData = monthData[mIndex];
-  const nextData = monthData[nextMIndex];
+  // Bottom Right -> Next Month
+  const handleNextClick = () => {
+    if (isFlipping) return;
+    setSelection({ start: null, end: null });
+    triggerFlip(() => nextMonth());
+  };
 
-  const CalendarContent = ({ monthDate, data, yr }) => (
-    <div className="w-full h-full bg-white rounded-lg shadow-[0_2px_4px_rgba(0,0,0,0.08),0_8px_24px_rgba(0,0,0,0.12)] overflow-hidden flex flex-col relative" onClick={clearSelection}>
-      <HeroImage data={data} year={yr} />
-      <div className="flex flex-row flex-1">
-        <div className="w-[30%]">
-          <MonthlyNotes monthKey={format(monthDate, 'yyyy_MM')} />
-        </div>
-        <div className="w-[70%]">
-          <CalendarGrid
-            currentMonth={monthDate}
-            selection={selection}
-            onDateInteraction={handleDateInteraction}
-            accentColor={data.accent}
-          />
-        </div>
-      </div>
-      <DailyNotesDrawer selection={selection} accentColor={data.accent} onClose={clearSelection} />
-    </div>
-  );
+  // Top Right -> Prev Month
+  const handlePrevClick = () => {
+    if (isFlipping) return;
+    setSelection({ start: null, end: null });
+    triggerFlip(() => prevMonth());
+  };
+
+  const clearSelection = () => setSelection({ start: null, end: null });
 
   return (
-    <div className="min-h-screen bg-[#EFEFEF] flex items-center justify-center p-4 md:p-8 font-sans overflow-hidden">
-      <div className="relative w-full max-w-[520px] aspect-[1/1.4] md:h-[750px] md:w-[520px] calendar-enter" style={{ perspective: '1200px' }}>
+    <div className="relative w-full max-w-[900px] h-full md:h-[650px] calendar-enter" style={{ perspective: '2000px' }}>
 
-        <SpiralBinding />
-
-        {/* Static Background page (shows next month during flip) */}
-        {isFlipping && (
-          <div className="absolute inset-0">
-            <CalendarContent monthDate={nextMonthDate} data={nextData} yr={nextYear} />
-          </div>
-        )}
-
-        {/* Flipping Page */}
+      {/* The Master Glassmorphism & Framer Motion Wrap */}
+      <motion.div
+        animate={{
+          y: [0, -8, 0],
+          boxShadow: [
+            "0px 15px 30px rgba(0,0,0,0.1)",
+            "0px 25px 50px rgba(0,0,0,0.15)",
+            "0px 15px 30px rgba(0,0,0,0.1)"
+          ]
+        }}
+        transition={{
+          duration: 6,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        className="w-full h-full relative"
+      >
+        {/* Visual rendering of the Page */}
         <div
-          className="w-full h-full absolute inset-0"
+          className="absolute inset-0 bg-white/20 backdrop-blur-2xl rounded-lg border border-white/50 flex flex-col md:flex-row overflow-hidden shadow-2xl"
           style={{
-            transformStyle: 'preserve-3d',
             transformOrigin: 'top center',
-            animation: isFlipping ? 'flipPage 520ms cubic-bezier(0.45, 0, 0.55, 1) forwards' : 'none'
+            animation: isFlipping ? 'flipPage 550ms ease-in-out forwards' : 'none'
           }}
         >
-          {/* Front Face */}
-          <div className="absolute inset-0" style={{ backfaceVisibility: 'hidden', backgroundColor: 'transparent' }}>
-            <CalendarContent monthDate={currentMonth} data={currentData} yr={year} />
-            {!isFlipping && (
-              <PageCurlCorner onCurlClick={(e) => { e.stopPropagation(); triggerFlip(); clearSelection(); }} />
-            )}
+          {/* Left Notes Section */}
+          <div className="hidden md:block w-[30%] shrink-0 z-10">
+            <MonthlyNotes monthKey={monthKey} />
           </div>
 
-          {/* Back Face */}
-          <div
-            className="absolute inset-0"
-            style={{
-              backfaceVisibility: 'hidden',
-              transform: 'rotateX(180deg)'
-            }}
-          >
-            <CalendarContent monthDate={nextMonthDate} data={nextData} yr={nextYear} />
-          </div>
-
-          {/* Shadow during flip */}
-          {isFlipping && (
-            <div
-              className="absolute inset-0 pointer-events-none mix-blend-multiply opacity-50"
-              style={{
-                background: 'radial-gradient(circle at center, rgba(0,0,0,0.1) 0%, transparent 80%)'
-              }}
+          {/* Right Calendar Container */}
+          <div className="flex-1 flex flex-col relative z-0">
+            <HeroImage data={data} year={currDate.getFullYear()} />
+            <CalendarGrid
+              currDate={currDate}
+              selection={selection}
+              setSelection={setSelection}
+              accentColor={data.accent}
             />
-          )}
+            <DailyNotesDrawer
+              selection={selection}
+              accentColor={data.accent}
+              onClose={clearSelection}
+            />
+          </div>
         </div>
-      </div>
+
+        {/* Physical Decor */}
+        <SpiralBinding />
+        <PageCurlCorner position="top" onCurlClick={handlePrevClick} />
+        <PageCurlCorner position="bottom" onCurlClick={handleNextClick} />
+
+      </motion.div>
     </div>
-  )
+  );
 }
