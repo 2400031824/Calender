@@ -3,7 +3,7 @@ import React from 'react';
 import { format } from 'date-fns';
 import { useNotes } from '../hooks/useNotes';
 
-export default function DailyNotesDrawer({ selection, accentColor }) {
+export default function DailyNotesDrawer({ selection, accentColor, onClose }) {
     const { start, end } = selection;
 
     let noteKey = null;
@@ -36,9 +36,17 @@ export default function DailyNotesDrawer({ selection, accentColor }) {
             onClick={(e) => e.stopPropagation()}
         >
             <div className="flex-1 flex flex-col p-4 md:p-6 pb-6">
-                <div className="text-sm font-bold text-gray-800 tracking-wide mb-3 flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: accentColor }}></div>
-                    {title}
+                <div className="flex flex-row justify-between items-center mb-3">
+                    <div className="text-sm font-bold text-gray-800 tracking-wide flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: accentColor }}></div>
+                        {title}
+                    </div>
+                    <button
+                        onClick={(e) => { e.stopPropagation(); if (onClose) onClose(); }}
+                        className="text-gray-400 hover:text-gray-700 transition"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
                 </div>
                 <textarea
                     className="flex-1 w-full bg-transparent resize-none outline-none text-sm text-gray-700 leading-7 font-sans"

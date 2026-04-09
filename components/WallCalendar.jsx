@@ -40,7 +40,7 @@ export default function WallCalendar() {
           />
         </div>
       </div>
-      <DailyNotesDrawer selection={selection} accentColor={data.accent} />
+      <DailyNotesDrawer selection={selection} accentColor={data.accent} onClose={clearSelection} />
     </div>
   );
 
