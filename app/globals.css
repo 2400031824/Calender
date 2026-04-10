@@ -150,7 +150,6 @@ body {
 .widget-card {
   max-width: 420px;
   margin-top: 8px;
-  -webkit-app-region: drag;
 }
 
 .widget-mode .hero-section {
@@ -186,6 +185,14 @@ body {
   z-index: 60;
   cursor: move;
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0.12), transparent);
+}
+
+.widget-mode .calendar-card,
+.widget-mode .calendar-sheet,
+.widget-mode .bottom-section,
+.widget-mode .left-panel,
+.widget-mode .right-panel {
+  -webkit-app-region: no-drag;
 }
 
 .widget-toolbar {
