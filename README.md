@@ -76,6 +76,16 @@ Packaged app behavior:
 - You can override URL with env var `WIDGET_URL`
 - Auto-update checks run in packaged mode (from GitHub Releases)
 
+## Release automation
+This repository now includes a GitHub Actions workflow at `.github/workflows/release-and-package.yml`.
+
+To publish a new release and upload the Windows installer automatically:
+1. Create a release tag, for example `v0.1.2`.
+2. Run the workflow manually from GitHub Actions or publish the release.
+3. The workflow will build the app, package the Windows installer, and attach `dist/*.exe` to the GitHub release.
+
+If your repo is already connected to Vercel, pushing to `main` will also trigger the site deployment automatically.
+
 Release helper files:
 - `.github/RELEASE_CHECKLIST.md`
 - `.github/RELEASE_NOTES_TEMPLATE.md`

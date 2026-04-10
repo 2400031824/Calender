@@ -19,6 +19,7 @@
     "desktop:pack": "electron-builder --win nsis",
     "desktop:pack-portable": "electron-builder --win portable",
     "desktop:pack-dir": "electron-builder --dir",
+    "release": "npm run build && npm run desktop:pack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

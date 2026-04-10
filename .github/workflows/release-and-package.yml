@@ -1,0 +1,44 @@
+name: Build and Publish Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag to publish, for example v0.1.2'
+        required: true
+      prerelease:
+        description: 'Publish as prerelease'
+        required: false
+        default: 'false'
+  release:
+    types: [published]
+
+jobs:
+  package-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js app
+        run: npm run build
+
+      - name: Package Windows desktop app
+        run: npm run desktop:pack
+
+      - name: Upload desktop assets to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/*.exe
+          draft: false
+          prerelease: ${{ github.event.inputs.prerelease || 'false' }}
+          tag_name: ${{ github.event.release.tag_name || github.event.inputs.release_tag }}
