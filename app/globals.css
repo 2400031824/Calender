@@ -127,23 +127,24 @@ body {
 
 .page-curl-arrow {
   position: absolute;
-  font-size: 16px;
-  color: rgba(0, 0, 0, 0.4);
+  font-size: 18px;
+  color: rgba(15, 23, 42, 0.8);
   pointer-events: none;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .arrow-right {
-  bottom: 4px;
-  right: 4px;
+  right: 8px;
+  bottom: 8px;
   transform: rotate(0deg);
 }
 
 .arrow-left {
-  top: 4px;
-  right: 4px;
+  right: 8px;
+  top: 8px;
   transform: rotate(180deg);
 }
+
 
 .month-quote {
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.65);

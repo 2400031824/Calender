@@ -14,7 +14,7 @@ const fs = require('fs');
 const path = require('path');
 
 const PROD_WIDGET_URL = 'https://calender-two-silk.vercel.app';
-const WIDGET_URL = process.env.WIDGET_URL || (app.isPackaged ? `${PROD_WIDGET_URL}?widget=true` : 'http://localhost:3000?widget=true');
+const WIDGET_URL = process.env.WIDGET_URL || (app.isPackaged ? PROD_WIDGET_URL : 'http://localhost:3000');
 const ASSETS_DIR = path.join(__dirname, 'assets');
 const ICON_PNG = path.join(ASSETS_DIR, 'widget-icon.png');
 const ICON_ICO = path.join(ASSETS_DIR, 'widget-icon.ico');
@@ -272,7 +272,9 @@ function createWindow() {
 
   applyOverlayMode(overlayMode);
 
-  mainWindow.loadURL(`${WIDGET_URL}?widget=1`);
+  const widgetUrl = new URL(WIDGET_URL);
+  widgetUrl.searchParams.set('widget', '1');
+  mainWindow.loadURL(widgetUrl.toString());
 
   mainWindow.on('move', queueStateSave);
   mainWindow.on('resize', queueStateSave);
