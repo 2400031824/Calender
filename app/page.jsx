@@ -1,8 +1,16 @@
 import WallCalendar from '../components/WallCalendar';
+import { useSearchParams } from 'next/navigation';
 
 export default function Home() {
+  const searchParams = useSearchParams();
+  const isWidget = searchParams.get('widget') === 'true';
+
   const downloadUrl = 'https://github.com/2400031824/Calender/releases/latest';
   const githubUrl = 'https://github.com/2400031824/Calender';
+
+  if (isWidget) {
+    return <WallCalendar />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">

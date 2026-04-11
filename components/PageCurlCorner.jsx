@@ -8,6 +8,8 @@ export default function PageCurlCorner({ position, onClick, disabled }) {
       ? 'page-curl page-curl-bottom-right'
       : 'page-curl page-curl-top-right';
 
+  const arrowClass = position === 'bottom-right' ? 'arrow-right' : 'arrow-left';
+
   return (
     <motion.button
       type="button"
@@ -21,6 +23,7 @@ export default function PageCurlCorner({ position, onClick, disabled }) {
       aria-label={position === 'bottom-right' ? 'Next month' : 'Previous month'}
     >
       <span className="page-curl-shadow" />
+      <span className={`page-curl-arrow ${arrowClass}`}>▶</span>
     </motion.button>
   );
 }
